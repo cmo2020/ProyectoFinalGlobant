@@ -31,8 +31,7 @@ public class User {
     @NotNull(message = "Document Number is mandatory")
     private int documentNumber;
 
-    @OneToOne
-    Booking booking;
+
 
 
 
