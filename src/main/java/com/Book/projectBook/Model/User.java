@@ -24,11 +24,11 @@ public class User {
     @Column(name="lastname", length = 45)
     @NotEmpty
     private String lastname;
+
     @Column(name="email", length = 50,unique = true)
-    @NotEmpty
-    //@Email
-    @Pattern(regexp = "^[A-Za-z0-9+_.-]+@(.+)$", message = "Formato no válido")
+    @NotEmpty(message = "Email is mandatory") @Pattern(regexp =  "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$", message = "Invalid email format")
     private String email;
+
     @Column(name="documentNumber",nullable = false)
     private int documentNumber;
 
