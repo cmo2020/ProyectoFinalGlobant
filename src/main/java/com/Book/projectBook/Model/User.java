@@ -3,11 +3,11 @@ package com.Book.projectBook.Model;
 
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
-import java.util.Set;
+
 
 
 @Entity
@@ -15,24 +15,26 @@ import java.util.Set;
 public class User {
 
     @Id
-//    @Column(name="idUser")
+    @Column(name="idUser")
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
     @Column(name="name", length = 45)
-    @NotEmpty
+    @NotEmpty(message = "Name is mandatory")
     private String name;
     @Column(name="lastname", length = 45)
-    @NotEmpty
+    @NotEmpty(message = "Lastname is mandatory")
     private String lastname;
-
     @Column(name="email", length = 50,unique = true)
     @NotEmpty(message = "Email is mandatory") @Pattern(regexp =  "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$", message = "Invalid email format")
     private String email;
-
     @Column(name="documentNumber",nullable = false)
+    @NotNull(message = "Document Number is mandatory")
     private int documentNumber;
 
-    private int one;
+    @OneToOne
+    Booking booking;
+
+
 
     public User() {
     }
@@ -43,6 +45,7 @@ public class User {
         this.lastname = lastname;
         this.email = email;
         this.documentNumber = documentNumber;
+
     }
 
     public Long getId() {

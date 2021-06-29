@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,8 +30,13 @@ public class BookController {
         return bookService.listAvailable();
     }
 
+    @GetMapping("/listReserved")
+    public List<Book> listReserved() {
+        return bookService.listReserved();
+    }
+
     @PostMapping("/createBook")
-    public ResponseEntity<Book> createBook(@RequestBody Book book) {
+    public ResponseEntity<Book> createBook(@Valid @RequestBody Book book) {
         bookService.createBook(book);
         return new ResponseEntity<Book>(HttpStatus.CREATED);
     }
@@ -45,8 +51,8 @@ public class BookController {
         return bookService.updateBook(book);
     }
 
-//    @DeleteMapping("/deleteBookById/{bookId}")
-//    public String deleteBookById(@PathVariable("bookId") Long id) {
-//        return bookService.deleteById(id);
-//    }
+    @DeleteMapping("/deleteBookById/{bookId}")
+    public String deleteBookById(@PathVariable("bookId") Long id) {
+        return bookService.deleteById(id);
+    }
 }
