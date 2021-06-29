@@ -32,6 +32,7 @@ public class User {
     @Column(name="documentNumber",nullable = false)
     private int documentNumber;
 
+    private int one;
 
     public User() {
     }
@@ -42,7 +43,6 @@ public class User {
         this.lastname = lastname;
         this.email = email;
         this.documentNumber = documentNumber;
-
     }
 
     public Long getId() {
@@ -75,7 +75,6 @@ public class User {
 
     public void setEmail(String email) {
         this.email = (email != null) ? email.toUpperCase() : null;
-
     }
 
     public int getDocumentNumber() {
