@@ -1,25 +1,174 @@
-//package com.Book.projectBook.Service;
-//
-//import com.Book.projectBook.Model.Book;
-//import com.Book.projectBook.Repository.BookRepository;
-//import org.junit.jupiter.api.Test;
-//import org.mockito.InjectMocks;
-//import org.springframework.boot.test.mock.mockito.MockBean;
-//
-//import static org.mockito.Mockito.when;
-//
-//public class BookServiceTest {
-//
-//    @MockBean
-//     private BookRepository mockRepository;
-//
-//    @InjectMocks
-//    private BookService bookService;
-//
-//    @Test
-//    public void testFindByTitle(String title) {
-//
-//        Book book = new Book(1L,"El ser", "Anon", 02-02-1998);
-//        when(mockRepository.findByTitle("El ser").thenR
-//
-//}
+package com.Book.projectBook.Service;
+
+import com.Book.projectBook.Exception.ExceptionBookExists;
+import com.Book.projectBook.Model.Book;
+
+import com.Book.projectBook.Repository.BookRepository;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.*;
+import org.mockito.junit.jupiter.MockitoExtension;
+import java.util.*;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+
+import static org.mockito.Mockito.*;
+
+
+@ExtendWith(MockitoExtension.class)
+class BookServiceTest {
+
+
+    @Mock
+    private BookRepository bookRepository;
+
+    @InjectMocks
+    BookService bookService;
+
+    @BeforeEach
+    void setUp() {
+        bookService = new BookService(bookRepository);
+    }
+
+
+    @Test
+    void canFindByTitle() {
+
+        Book book = new Book(1L, "Harry Potter", "ANon", new Date());
+
+        when(bookRepository.findByTitle(book.getTitle())).thenReturn(book);
+
+        String title = "Harry Potter";
+
+        Book found = bookService.findByTitle(title);
+
+        assertThat(found.getTitle()).isEqualTo(title);
+
+
+    }
+
+
+    @Test
+    void canCreateBook() throws ExceptionBookExists {
+
+        Book book = new Book(1L, "Harry Potter", "ANon", new Date());
+
+        when(bookRepository.findByTitle(any())).thenReturn(null);
+
+        Book bookCreated = bookService.createBook(book);
+
+        verify(bookRepository, times(1)).save(book);
+
+
+    }
+
+    @Test
+    void cantCreateBook() throws ExceptionBookExists {
+
+        Book book = new Book(1L, "Harry Potter", "ANon", new Date());
+
+        when(bookRepository.findByTitle(book.getTitle())).thenReturn(book);
+
+        Assertions.assertThrows(ExceptionBookExists.class, () -> {
+            Book bookCreated = bookService.createBook(book);
+        });
+
+    }
+
+
+    @Test
+    void canUpdateBook() {
+        Date publishedDate = new Date(2000, 1, 1);
+        Book originalBook = new Book(1L, "Harry Potter", "ANon", publishedDate);
+
+        Date newDate = new Date(2020, 1, 1);
+        Book newBook = new Book(1L, "Yoda", "SomeBody", newDate);
+
+        when(bookRepository.findById(1L)).thenReturn(Optional.of(originalBook));
+
+        Book resultBook = bookService.updateBook(newBook);
+
+        verify(bookRepository, times(2)).findById(1L);
+        verify(bookRepository, times(1)).save(originalBook);
+
+        assertThat(resultBook.getTitle()).isEqualTo("YODA");
+        assertThat(resultBook.getAuthor()).isEqualTo("SOMEBODY");
+        assertThat(resultBook.getPublishedDate()).isEqualTo(newDate);
+
+
+    }
+
+
+    @Test
+    void deleteById() {
+
+        String result = bookService.deleteById(1L);
+
+        verify(bookRepository, times(1)).deleteById(1L);
+
+        assertThat(result).isEqualTo("Book removed \n" + "IdBook:" + 1L);
+
+    }
+
+    @Test
+    void listBook() {
+        Date publishedDate = new Date();
+        Book [] bookArray = new Book[]{
+                new Book ( 1L, "Title1", "Author1", publishedDate),
+                new Book(2L, "Title2", "Author2", publishedDate),
+                new Book(3L, "Title3", "Author3", publishedDate)
+        };
+        List <Book> bookList = new ArrayList<>(Arrays.asList(bookArray));
+
+        when(bookRepository.findByOrderByTitleAsc()).thenReturn(bookList);
+
+        List <Book> result = bookService.listBook();
+
+        verify(bookRepository, times(1)).findByOrderByTitleAsc();
+
+        assertThat(result).isEqualTo(bookList);
+
+
+    }
+
+    @Test
+    void listAvailable() {
+        Date publishedDate = new Date();
+        Book [] bookArray = new Book[]{
+                new Book ( 1L, "Title1", "Author1", publishedDate),
+                new Book(2L, "Title2", "Author2", publishedDate),
+                new Book(3L, "Title3", "Author3", publishedDate)
+        };
+        List <Book> bookList = new ArrayList<>(Arrays.asList(bookArray));
+
+        when(bookRepository.findByBookingIsNull()).thenReturn(bookList);
+
+        List <Book> result = bookService.listBook();
+
+        verify(bookRepository, times(1)).findByOrderByTitleAsc();
+
+        assertThat(result).isEqualTo(bookList);
+
+
+
+
+    }
+
+    @Test
+    @Disabled
+    void listReserved() {
+    }
+
+    @Test
+    @Disabled
+    void getStatus() {
+    }
+
+    @Test
+    @Disabled
+    void getBookById() {
+    }
+}

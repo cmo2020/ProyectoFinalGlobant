@@ -43,29 +43,32 @@ public class BookService implements BookServiceInterface {
     public Book updateBook(Book book) {
         Optional<Book> optionalBook = bookRepository.findById(book.getId());
         if (optionalBook.isPresent()){
-        Book updateBook = optionalBook.get();
-        updateBook.setTitle(book.getTitle());
-        updateBook.setAuthor(book.getAuthor());
-        updateBook.setPublishedDate(book.getPublishedDate());
-        bookRepository.save(updateBook);}
-        return bookRepository.findById(book.getId()).get();
+             Book updateBook = optionalBook.get();
+             updateBook.setTitle(book.getTitle());
+             updateBook.setAuthor(book.getAuthor());
+             updateBook.setPublishedDate(book.getPublishedDate());
+             bookRepository.save(updateBook);
+
+        }
+
+        return   bookRepository.findById(book.getId()).get();
     }
 
       @Override
         public String deleteById(Long id) {
-        bookRepository.deleteById(id);
-        return "Book removed \n" + "IdBook:" + id;
+           bookRepository.deleteById(id);
+           return "Book removed \n" + "IdBook:" + id;
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<Book> listBook() {
+       public List<Book> listBook() {
         return (List<Book>) bookRepository.findByOrderByTitleAsc();
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<Book> listAvailable() {
+        public List<Book> listAvailable() {
         return (List<Book>) bookRepository.findByBookingIsNull();
     }
 
