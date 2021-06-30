@@ -15,11 +15,11 @@ public interface BookServiceInterface {
 
      String deleteById(Long id);
 
-      List<Book> listBook();
+     List<Book> listBook();
 
-      Optional<Book> getBookById(Book book);
+     Optional<Book> getBookById(Book book);
 
-      List<Book> listAvailable();
+     List<Book> listAvailable();
 
-       List<Book> listReserved();
+     List<Book> listReserved();
 }
