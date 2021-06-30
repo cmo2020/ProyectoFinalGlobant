@@ -2,18 +2,11 @@ package com.Book.projectBook.Service;
 
 import com.Book.projectBook.Exception.ExceptionBookExists;
 import com.Book.projectBook.Model.Book;
-
 import com.Book.projectBook.Model.Booking;
 import com.Book.projectBook.Repository.BookRepository;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
