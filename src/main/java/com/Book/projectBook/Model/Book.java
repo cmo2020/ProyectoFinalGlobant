@@ -26,7 +26,7 @@ public class Book {
 
     @Column
     @NotNull(message = "Date is mandatory")
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE, pattern="dd-MM-yyyy")
+    @DateTimeFormat(pattern="dd-MM-yyyy")
     private Date publishedDate;
 
     @OneToOne(mappedBy = "book") //propiedad dentro de booking
@@ -35,12 +35,11 @@ public class Book {
     public Book() {
     }
 
-    public Book(Long id, String title, String author, @NonNull Date publishedDate, Booking booking) {
+    public Book(Long id, String title, String author, @NonNull Date publishedDate) {
         this.id = id;
         this.title = title;
         this.author = author;
         this.publishedDate = publishedDate;
-        this.booking = booking;
 
     }
 

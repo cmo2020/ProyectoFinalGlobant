@@ -22,13 +22,18 @@ import java.util.Optional;
 public class BookService implements BookServiceInterface {
 
 
-    @Autowired
+
     private BookRepository bookRepository;
 
-    public Book findByTitle(String title) {
-        return bookRepository.findByTitle(title);
+    @Autowired
+    public BookService(BookRepository bookRepository) {
+        this.bookRepository = bookRepository;
     }
 
+
+    public Book findByTitle(String title) {
+       return bookRepository.findByTitle(title);
+    }
 
 
     @Override
@@ -43,11 +48,13 @@ public class BookService implements BookServiceInterface {
     @Override
     public Book updateBook(Book book) {
         Optional<Book> optionalBook = bookRepository.findById(book.getId());
+        if (optionalBook.isPresent()){
         Book updateBook = optionalBook.get();
         updateBook.setTitle(book.getTitle());
         updateBook.setAuthor(book.getAuthor());
         updateBook.setPublishedDate(book.getPublishedDate());
-        return bookRepository.save(book);
+        bookRepository.save(updateBook);}
+        return bookRepository.findById(book.getId()).get();
     }
 
       @Override
