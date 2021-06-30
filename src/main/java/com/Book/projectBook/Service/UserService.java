@@ -14,10 +14,7 @@ import java.util.Optional;
 @Service
 public class UserService implements UserServiceInterface{
 
-
     private UserRepository userRepository;
-
-
 
     @Autowired
     public UserService(UserRepository userRepository) {
@@ -29,29 +26,37 @@ public class UserService implements UserServiceInterface{
         return userRepository.save(user);
     }
 
+//    @Override
+//    public User updateUser(User user) {
+//        Optional<User> optionalUser = userRepository.findById(user.getId());
+//        User updateUser = optionalUser.get();
+//        updateUser.setName(user.getName());
+//        updateUser.setLastname(user.getLastname());
+//        updateUser.setEmail(user.getEmail());
+//        updateUser.setDocumentNumber(user.getDocumentNumber());
+//        userRepository.save(updateUser);
+//        return userRepository.findById(user.getId()).get();
+//    }
+
     @Override
     public User updateUser(User user) {
         Optional<User> optionalUser = userRepository.findById(user.getId());
         if(optionalUser.isPresent()){
-        User updateUser = optionalUser.get();
-        updateUser.setName(user.getName());
-        updateUser.setLastname(user.getLastname());
-        updateUser.setEmail(user.getEmail());
-        updateUser.setDocumentNumber(user.getDocumentNumber());
-        userRepository.save(updateUser);    }
+            User updateUser = optionalUser.get();
+            updateUser.setName(user.getName());
+            updateUser.setLastname(user.getLastname());
+            updateUser.setEmail(user.getEmail());
+            updateUser.setDocumentNumber(user.getDocumentNumber());
+            userRepository.save(updateUser);    }
         return userRepository.findById(user.getId()).get();}
 
     @Override
-    public String deleteUserById(Long id) {
-        userRepository.deleteById(id);
-        return "User removed \n" + "IdUser:" + id;
-
+    public String deleteUserById(Long idUser) {
+        userRepository.deleteById(idUser);
+        return "User removed"+ idUser;
     }
 
-
-
-
-      @Override
+    @Override
     public Optional<User> getUserById(User user) {
         return userRepository.findById(user.getId());
     }

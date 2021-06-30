@@ -25,22 +25,22 @@ public class UserController {
 //    }
 
     @PostMapping("/createUser")
-    public ResponseEntity<User>  createUser(@Valid @RequestBody User user) {
+    public ResponseEntity<User> createUser(@Valid @RequestBody User user) {
         userService.createUser(user);
         return new ResponseEntity<User>(HttpStatus.CREATED);
     }
 
-//    @RequestMapping("/getUserById/{userId}")
-//    public Optional<User> getUserById(@PathVariable("userId") User user) {
-//        return userService.getUserById(user);
-//    }
+    @RequestMapping("/getUserById/{userId}")
+    public Optional<User> getUserById(@PathVariable("userId") User user) {
+        return userService.getUserById(user);
+    }
 
-//    @DeleteMapping("/deleteUserById/{userId}")
-//    public String deleteUserById(@PathVariable("userId") Long idUser) {
-//        return userService.deleteUserById(idUser);
-//    }
+    @DeleteMapping("/deleteUserById/{userId}")
+    public String deleteUserById(@PathVariable("userId") Long idUser) {
+        return userService.deleteUserById(idUser);
+    }
 
-    @PutMapping("/updateUser")
+    @PutMapping("/updateUserById/{userId}")
     public User updateUser(@RequestBody User user) {
         return userService.updateUser(user);
     }

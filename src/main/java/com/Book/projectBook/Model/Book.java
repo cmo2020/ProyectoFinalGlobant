@@ -73,7 +73,15 @@ public class Book {
         this.publishedDate = publishedDate;
     }
 
-    public Booking getBooking() {
+    public String getStatus() {
+        if (booking == null) {
+            return "available";
+        } else {
+            return "reserved";
+        }
+    }
+
+   public Booking getBooking() {
         return booking;
     }
 
