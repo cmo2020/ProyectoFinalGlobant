@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.NonNull;
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 
@@ -16,21 +17,21 @@ import java.util.List;
 public class Booking {
 
     @Id
-//    @Column(name="idBooking")
+    @Column(name="idBooking")
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private  Long idBooking;
 
-    @NonNull
-    @DateTimeFormat(pattern="MM/dd/yyyy")
+
+    @NotNull(message = "Date is mandatory")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE, pattern="dd-MM-yyyy")
     private Date startDate;
 
-    @NonNull
-//    @JsonFormat(pattern="dd-MM-yyyy")
-    @DateTimeFormat(pattern="MM/dd/yyyy")
+    @NotNull(message = "Date is mandatory")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE, pattern="dd-MM-yyyy")
     private Date endDate;
 
-    @OneToOne // no hace falta ni cascade ni fetch
-//    @JoinColumn(name = "idUser")
+
+    @OneToOne
     private User user;
 
     @OneToOne

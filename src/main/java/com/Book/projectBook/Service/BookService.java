@@ -29,6 +29,8 @@ public class BookService implements BookServiceInterface {
         return bookRepository.findByTitle(title);
     }
 
+
+
     @Override
     public Book createBook(Book book) {
         Book existingBook = bookRepository.findByTitle(book.getTitle());
@@ -48,11 +50,11 @@ public class BookService implements BookServiceInterface {
         return bookRepository.save(book);
     }
 
-//    @Override
-//    public String deleteById(Long id) {
-//        bookRepository.deleteById(id);
-//        return "Book removed \n" + "IdBook:" + id;
-//    }
+      @Override
+        public String deleteById(Long id) {
+        bookRepository.deleteById(id);
+        return "Book removed \n" + "IdBook:" + id;
+    }
 
     @Override
     @Transactional(readOnly = true)
@@ -64,6 +66,19 @@ public class BookService implements BookServiceInterface {
     @Transactional(readOnly = true)
     public List<Book> listAvailable() {
         return (List<Book>) bookRepository.findByBookingIsNull();
+
+    }
+
+    @Override
+    public List<Book> listReserved() {
+        return (List<Book>) bookRepository.findByBookingNotNull();
+    }
+
+
+    public String getStatus(Booking booking) {
+        if (booking == null) { return "available"; }
+        else {  return "reserved";
+        }
     }
 
     @Override

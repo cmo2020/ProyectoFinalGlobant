@@ -5,6 +5,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.NonNull;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 
@@ -15,17 +16,17 @@ public class Book {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
-
     @Column(name="title", length = 45)
-    @NotEmpty
+    @NotEmpty(message = "Title is mandatory")
     private  String title;
 
     @Column(name="author", length = 45)
-    @NotEmpty
+    @NotEmpty(message = "Author is mandatory")
     private  String author;
 
-    @NonNull
-    @DateTimeFormat(pattern="MM/dd/yyyy")
+    @Column
+    @NotNull(message = "Date is mandatory")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE, pattern="dd-MM-yyyy")
     private Date publishedDate;
 
     @OneToOne(mappedBy = "book") //propiedad dentro de booking
@@ -73,15 +74,7 @@ public class Book {
         this.publishedDate = publishedDate;
     }
 
-    public String getStatus() {
-        if (booking == null) {
-            return "available";
-        } else {
-            return "reserved";
-        }
-    }
-
-   public Booking getBooking() {
+    public Booking getBooking() {
         return booking;
     }
 
