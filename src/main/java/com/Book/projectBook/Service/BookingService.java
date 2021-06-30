@@ -52,15 +52,15 @@ public class BookingService implements BookingServiceInterface{
         return "Booking removed"+ idBooking;
     }
 
-//    @Override
-//    @Transactional(readOnly = true)
-//    public List<Booking> listBooking() {
-//       return (List<Booking>)bookingRepository.findAll();
-//    }
-//
-//    @Override
-//    public Optional<Booking> getBookingById(Booking booking) {
-//        return bookingRepository.findById(booking.getIdBooking());
-//    }
+    @Override
+    @Transactional(readOnly = true)
+    public List<Booking> listBooking() {
+       return (List<Booking>)bookingRepository.findAll();
+    }
+
+    @Override
+    public Optional<Booking> getBookingById(Booking booking) {
+        return bookingRepository.findById(booking.getIdBooking());
+    }
 
 }

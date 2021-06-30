@@ -15,8 +15,8 @@ public interface BookingServiceInterface {
 
      String deleteByIdBooking(Long idBooking);
 
-//     List<Booking> listBooking();
-//
-//     Optional<Booking> getBookingById(Booking booking);
+     List<Booking> listBooking();
+
+     Optional<Booking> getBookingById(Booking booking);
 
 }
