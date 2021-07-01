@@ -83,7 +83,7 @@ public class BookService implements BookServiceInterface {
     @Override
     public Optional<Book> getBookById(Book book) {
 
-        return bookRepository.findById(book.getId());
+         return bookRepository.findById(book.getId());
     }
 
 

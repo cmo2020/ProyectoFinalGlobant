@@ -18,13 +18,16 @@ import java.util.Optional;
 @RequestMapping("booking")
 public class BookingController {
 
-    @Autowired
-    private BookingService bookingService;
 
+    private BookingService bookingService;
+    @Autowired
+    public BookingController(BookingService bookingService) {
+        this.bookingService = bookingService;
+    }
 
     @GetMapping("/listBooking")
     public List<Booking> listBooking() {
-        return bookingService.listBooking();
+         return bookingService.listBooking();
     }
     @PostMapping("/createBooking")
     public ResponseEntity<Booking> createBooking(@Valid @RequestBody Booking booking) {
