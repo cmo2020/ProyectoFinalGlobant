@@ -42,8 +42,8 @@ public class BookController {
 
     @PostMapping("/createBook")
     public ResponseEntity<Book> createBook(@Valid @RequestBody Book book) {
-           bookService.createBook(book);
-        return new ResponseEntity<Book>(HttpStatus.CREATED);
+        bookService.createBook(book);
+     return new ResponseEntity<Book>(HttpStatus.CREATED);
     }
 
     @RequestMapping("/getBookById/{bookId}")
@@ -58,6 +58,6 @@ public class BookController {
 
     @DeleteMapping("/deleteBookById/{bookId}")
     public String deleteBookById(@PathVariable("bookId") Long id) {
-         return bookService.deleteById(id);
+          return bookService.deleteById(id);
     }
 }

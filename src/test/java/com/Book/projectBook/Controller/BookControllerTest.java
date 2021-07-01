@@ -36,7 +36,7 @@ class BookControllerTest {
     }
 
     @Test
-     void listBook()  throws Exception {
+     void testListBook()  throws Exception {
         Date publishedDate = new Date();
         Book [] bookArray = new Book[]{
                 new Book ( 1L, "Title1", "Author1", publishedDate),
@@ -55,7 +55,7 @@ class BookControllerTest {
     }
 
     @Test
-    void listAvailable() {
+    void testListAvailable() {
         Date publishedDate = new Date();
         Book [] bookArray = new Book[]{
                 new Book ( 1L, "Title1", "Author1", publishedDate),
@@ -74,7 +74,7 @@ class BookControllerTest {
     }
 
     @Test
-    void listReserved() {
+    void testListReserved() {
         Date publishedDate = new Date();
         Book [] bookArray = new Book[]{
                 new Book ( 1L, "Title1", "Author1", publishedDate),
@@ -93,24 +93,21 @@ class BookControllerTest {
     }
 
     @Test
-    @Disabled
-    void createBook() throws Exception {
-//        Book book = new Book(1L, "Harry Potter", "ANon", new Date());
-//        ResponseEntity<Book> statusCode = new ResponseEntity<Book> (HttpStatus.CREATED);
-//
-//        when(bookService.createBook(book), .thenReturn(statusCode);
-//
-//
-//        Book result = bookService.createBook(book);
-//
-//        verify(bookService, times(1)).createBook(book);
-//
-//        assertThat(result).isEqualTo(book);
-//        assertThat(result).isEqualTo(statusCode);
+    void testCreateBook() throws Exception {
+
+        Book book = new Book(1L, "Harry Potter", "ANon", new Date());
+
+        ResponseEntity<Book> result = bookController.createBook(book);
+
+
+        verify(bookService, times(1)).createBook(book);
+
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+
     }
 
     @Test
-    void getBookById() throws Exception{
+    void testGetBookById() throws Exception{
 
         Date date = new Date(2020, 1, 1);
         Book book = new Book(1L, "Yoda", "SomeBody", date);
@@ -126,24 +123,20 @@ class BookControllerTest {
     }
 
     @Test
-    @Disabled
-    void updateBook() throws Exception{
+    void testUpdateBook() throws Exception{
 
-//        Date publishedDate = new Date(2000, 1, 1);
-//        Book originalBook = new Book(1L, "Harry Potter", "ANon", publishedDate);
-//
-//        Date newDate = new Date(2020, 1, 1);
-//        Book newBook = new Book(1L, "Yoda", "SomeBody", newDate);
-//
-//        when(bookService.updateBook(newBook)).thenReturn(originalBook);
-//
-//        Book resultBook = bookController.updateBook(newBook);
-//
-//        verify(bookService, times(2)).updateBook(originalBook);
-//
-//        assertThat(resultBook.getTitle()).isEqualTo("YODA");
-//        assertThat(resultBook.getAuthor()).isEqualTo("SOMEBODY");
-//        assertThat(resultBook.getPublishedDate()).isEqualTo(newDate);
+        Date publishedDate = new Date(2000, 1, 1);
+        Book book = new Book(1L, "Harry Potter", "Anon", publishedDate);
+
+        when(bookService.updateBook(book)).thenReturn(book);
+
+        Book result = bookController.updateBook(book);
+
+        verify(bookService, times(1)).updateBook(book);
+
+        assertThat(result.getTitle()).isEqualTo("Harry Potter");
+        assertThat(result.getAuthor()).isEqualTo("Anon");
+        assertThat(result.getPublishedDate()).isEqualTo(publishedDate);
 
 
 
@@ -151,16 +144,15 @@ class BookControllerTest {
     }
 
     @Test
-    void deleteBookById() {
+    void testDeleteBookById() {
 
-//        String result = bookService.deleteById(1L);
-//
-//        when(bookService.deleteById(1L)).thenReturn(result);
-//
-//        verify(bookController, times(1)).deleteBookById(1L);
-//
-//        assertThat(result).isEqualTo(1L);
-//
+        String result = bookController.deleteBookById(1L);
+
+
+        verify(bookService, times(1)).deleteById(1L);
+
+        assertThat(result).isEqualTo(null);
+
 
     }
 

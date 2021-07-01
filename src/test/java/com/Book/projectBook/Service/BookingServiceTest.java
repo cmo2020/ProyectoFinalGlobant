@@ -98,7 +98,7 @@ class BookingServiceTest {
         when(bookingRepository.findById(1L)).thenReturn(Optional.of(booking));
 
         Optional<Booking> bookingObtained = underTest.getBookingById(booking);
-        
+
         verify(bookingRepository, times(1)).findById(1L);
     }
 }

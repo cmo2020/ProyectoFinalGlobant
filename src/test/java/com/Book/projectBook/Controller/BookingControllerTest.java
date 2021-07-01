@@ -13,6 +13,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.util.*;
 
@@ -35,7 +37,7 @@ class BookingControllerTest {
 
 
     @Test
-    void listBooking() {
+    void testListBooking() {
 
         Date startDate = new Date();
         Date endDate = new Date();
@@ -57,15 +59,22 @@ class BookingControllerTest {
     }
 
     @Test
-    @Disabled
-    void createBooking() {
+    void testCreateBooking() {
+
+        Date startDate  = new Date(2000, 1, 1);
+        Date endDate = new Date(2021, 2, 7);
+        Booking booking = new Booking (3L, startDate, endDate);
+
+        ResponseEntity<Booking> result = bookingController.createBooking(booking);
 
 
-        ;
+        verify(bookingService, times(1)).createBooking(booking);
+
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.CREATED);
     }
 
     @Test
-    void getBookingById() {
+    void testGetBookingById() {
 
         Date startDate = new Date();
         Date endDate = new Date();
@@ -82,12 +91,34 @@ class BookingControllerTest {
     }
 
     @Test
-    @Disabled
     void deleteBookingById() {
+
+        String result = bookingController.deleteBookingById(1L);
+
+
+        verify(bookingService, times(1)).deleteByIdBooking(1L);
+
+        assertThat(result).isEqualTo(null);
+
     }
 
     @Test
-    @Disabled
-    void updateBooking() {
+    void  testUpdateBooking() {
+
+        Date startDate = new Date();
+        Date endDate = new Date();
+        Booking booking = new Booking (3L, startDate, endDate);
+
+        when(bookingService.updateBooking(booking)).thenReturn(booking);
+
+        Booking result = bookingController.updateBooking(booking);
+
+        verify(bookingService, times(1)).updateBooking(booking);
+
+        assertThat(result.getStartDate()).isEqualTo(startDate);
+        assertThat(result.getEndDate()).isEqualTo(endDate);
+
+
+
     }
 }
