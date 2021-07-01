@@ -17,23 +17,26 @@ import java.util.*;
 public class BookingService implements BookingServiceInterface{
 
 
-    @Autowired
+
     private BookingRepository bookingRepository;
     @Autowired
     private BookRepository bookRepository;
     @Autowired
     private UserRepository userRepository;
 
-
+    @Autowired
+    public BookingService(BookingRepository bookingRepository) {
+        this.bookingRepository = bookingRepository;
+    }
 
     @Override
     public Booking createBooking(Booking booking) {
         Optional<Book> optionalBook = bookRepository.findById(booking.getBook().getId());
         Optional<User> optionalUser = userRepository.findById(booking.getUser().getId());
-        Book book = optionalBook.get();
-        User user = optionalUser.get();
-        booking.setBook(book);
-        booking.setUser(user);
+             Book book = optionalBook.get();
+             User user = optionalUser.get();
+             booking.setBook(book);
+             booking.setUser(user);
         return bookingRepository.save(booking);
     }
 
@@ -41,10 +44,10 @@ public class BookingService implements BookingServiceInterface{
     public Booking updateBooking(Booking booking) {
         Optional<Booking> optionalBooking = bookingRepository.findById(booking.getIdBooking());
         if(optionalBooking.isPresent()){
-        Booking updatedBooking = optionalBooking.get();
-        updatedBooking.setStartDate(booking.getStartDate());
-        updatedBooking.setEndDate(booking.getEndDate());
-        bookingRepository.save(updatedBooking);}
+             Booking updatedBooking = optionalBooking.get();
+             updatedBooking.setStartDate(booking.getStartDate());
+             updatedBooking.setEndDate(booking.getEndDate());
+             bookingRepository.save(updatedBooking);}
         return bookingRepository.findById(booking.getIdBooking()).get();
     }
 
