@@ -17,7 +17,6 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
-
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
 
@@ -91,7 +90,6 @@ class UserServiceTest {
         String result = underTest.deleteUserById(1L);
 
         verify(userRepository, times(1)).deleteById(1L);
-
         assertThat(result).isEqualTo("User removed \n" + "IdUser:" + 1L);
     }
 
