@@ -69,25 +69,31 @@ public class BookService implements BookServiceInterface {
     @Override
     @Transactional(readOnly = true)
         public List<Book> listAvailable() {
-        return (List<Book>) bookRepository.findByBookingIsNull();
+
+            return (List<Book>) bookRepository.findByBookingIsNull();
     }
 
     @Override
     public List<Book> listReserved() {
-        return (List<Book>) bookRepository.findByBookingNotNull();
+
+            return (List<Book>) bookRepository.findByBookingNotNull();
     }
 
-    public String getStatus(Booking booking) {
-        if (booking == null) { return "available"; }
-        else {  return "reserved";
-        }
-    }
 
     @Override
     public Optional<Book> getBookById(Book book) {
+
         return bookRepository.findById(book.getId());
     }
 
+
+    public String getStatus(Booking booking) {
+        if (booking == null) {
+             return "available";
+        } else {
+            return "reserved";
+        }
+    }
 
 }
 

@@ -28,15 +28,12 @@ class BookingServiceTest {
     @Mock
     private BookingRepository bookingRepository;
 
-    @Autowired
-    private MockMvc mvc;
-
     @InjectMocks
     private BookingService underTest;
 
-//    @BeforeEach
-//    void setUp() { underTest = new BookingService(bookingRepository);
-//    }
+    @BeforeEach
+    void setUp() { underTest = new BookingService(bookingRepository);
+    }
 
     @Test
     @Disabled
@@ -68,7 +65,9 @@ class BookingServiceTest {
     @Test
     void canDeleteByIdBooking() {
         String result = underTest.deleteByIdBooking(1L);
+
         verify(bookingRepository, times(1)).deleteById(1L);
+
         assertThat(result).isEqualTo("Booking removed \n" + "IdBooking:" + 1L);
     }
 
@@ -95,8 +94,11 @@ class BookingServiceTest {
     void canGetBookingById() {
         Date publishedDate = new Date(2000, 1, 1);
         Booking booking = new Booking(1L, publishedDate, publishedDate);
+
         when(bookingRepository.findById(1L)).thenReturn(Optional.of(booking));
+
         Optional<Booking> bookingObtained = underTest.getBookingById(booking);
+        
         verify(bookingRepository, times(1)).findById(1L);
     }
 }

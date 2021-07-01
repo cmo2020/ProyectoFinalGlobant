@@ -3,6 +3,7 @@ package com.Book.projectBook.Service;
 import com.Book.projectBook.Exception.ExceptionBookExists;
 import com.Book.projectBook.Model.Book;
 
+import com.Book.projectBook.Model.Booking;
 import com.Book.projectBook.Repository.BookRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -146,9 +147,9 @@ class BookServiceTest {
 
         when(bookRepository.findByBookingIsNull()).thenReturn(bookList);
 
-        List <Book> result = bookService.listBook();
+        List <Book> result = bookService.listAvailable();
 
-        verify(bookRepository, times(1)).findByOrderByTitleAsc();
+        verify(bookRepository, times(1)).findByBookingIsNull();
 
         assertThat(result).isEqualTo(bookList);
 
@@ -158,17 +159,50 @@ class BookServiceTest {
     }
 
     @Test
-    @Disabled
     void listReserved() {
+        Date publishedDate = new Date();
+        Book [] bookArray = new Book[]{
+                new Book ( 1L, "Title1", "Author1", publishedDate),
+                new Book(2L, "Title2", "Author2", publishedDate),
+                new Book(3L, "Title3", "Author3", publishedDate)
+        };
+        List <Book> bookList = new ArrayList<>(Arrays.asList(bookArray));
+
+        when(bookRepository.findByBookingNotNull()).thenReturn(bookList);
+
+        List <Book> result = bookService.listReserved();
+
+        verify(bookRepository, times(1)).findByBookingNotNull();
+
+        assertThat(result).isEqualTo(bookList);
+
+
     }
 
     @Test
-    @Disabled
     void getStatus() {
+        Booking newBooking = new Booking();
+
+        String bookingCreated = bookService.getStatus(newBooking);
+
+        assertThat(bookingCreated).isEqualTo("reserved");
+        assertThat(bookingCreated).isNotEqualTo("available");
+
+
     }
 
     @Test
-    @Disabled
     void getBookById() {
+
+        Date date = new Date(2020, 1, 1);
+        Book book = new Book(1L, "Yoda", "SomeBody", date);
+
+        when(bookRepository.findById(1L)).thenReturn(Optional.of(book));
+
+        Optional<Book> bookObtained = bookService.getBookById(book);
+
+        verify(bookRepository, times(1)).findById(1L);
+
+
     }
 }
