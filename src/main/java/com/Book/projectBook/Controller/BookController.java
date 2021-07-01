@@ -17,22 +17,27 @@ import java.util.Optional;
 @RequestMapping("book")
 public class BookController {
 
-    @Autowired
+
     private BookService bookService;
+
+    @Autowired
+    public BookController(BookService bookService) {
+        this.bookService = bookService;
+    }
 
     @GetMapping("/listBook")
     public List<Book> listBook() {
-        return bookService.listBook();
+         return bookService.listBook();
     }
 
     @GetMapping("/listAvailable")
     public List<Book> listAvailable() {
-        return bookService.listAvailable();
+         return bookService.listAvailable();
     }
 
     @GetMapping("/listReserved")
     public List<Book> listReserved() {
-        return bookService.listReserved();
+         return bookService.listReserved();
     }
 
     @PostMapping("/createBook")
@@ -43,7 +48,7 @@ public class BookController {
 
     @RequestMapping("/getBookById/{bookId}")
     public Optional<Book> getBookById(@PathVariable("bookId") Book book) {
-        return bookService.getBookById(book);
+         return bookService.getBookById(book);
     }
 
     @PutMapping("/updateBookById/{bookId}")
@@ -53,6 +58,6 @@ public class BookController {
 
     @DeleteMapping("/deleteBookById/{bookId}")
     public String deleteBookById(@PathVariable("bookId") Long id) {
-        return bookService.deleteById(id);
+         return bookService.deleteById(id);
     }
 }

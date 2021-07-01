@@ -203,6 +203,8 @@ class BookServiceTest {
 
         verify(bookRepository, times(1)).findById(1L);
 
+        assertThat(bookObtained).isEqualTo(Optional.of(book));
+
 
     }
 }
