@@ -26,15 +26,12 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
-//@RunWith(SpringRunner.class)
 @WebMvcTest(UserController.class)
-//@ComponentScan(basePackages = {"com.mypackage"})
-//@SpringBootTest
-//@AutoConfigureMockMvc
 class UserControllerTest {
 
     @InjectMocks
@@ -45,6 +42,7 @@ class UserControllerTest {
 
     @MockBean
     private UserService userService;
+    private UserRepository userRepository;
 
 
     @Test
@@ -77,20 +75,35 @@ class UserControllerTest {
         assertThat(captureUser.getName()).isEqualTo(user.getName());
     }
 
-//    @Test
-//    public void updateUserWhenMethodsPut() {
-//
-//        User userTest = new User(1l,"Federico","Ueno","federico@gmail.com",21212121);
-//
-////        given(userController.updateUser(userTest)).willReturn(userTest);
-////
-//////        given(userRepository.findById(userTest.getId())).willReturn(Optional.of(userTest));
-////
-////        mvc.perform(put("/updateUser"));
-//
-//        when(userRepository.findById(userTest.getId())).thenReturn(Optional.of(userTest));
-//        userController.updateUser(userTest);
-//        verify(userController).updateUser(userTest);
-//
-//    }
+    @Test
+    public void updateUserByIdWhenMethodsPut() throws Exception {
+
+        //given
+        User user = new User(
+                1L,
+                "FEDERICO",
+                "Ueno",
+                "federico@gmail.com",
+                21212121);
+
+        given(userRepository.findById(user.getId())).willReturn(Optional.of(user));
+
+        //when
+        String jsonBody = "{\"id\": 1,\"name\": \"FedericoUpdate\", \"lastname\": \"Ueno\", \"email\": \"federico@gmail.com\", \"documentNumber\": \"21212121\"}";
+
+        mvc.perform(put("/user/updateUserById/{userId}")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonBody)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(content().json("{\"id\": 1,\"name\": \"FedericoUpdate\", \"lastname\": \"Ueno\", \"email\": \"federico@gmail.com\", \"documentNumber\": \"21212121\"}"));
+
+        //then
+        ArgumentCaptor<User> userArgumentCaptor =
+                ArgumentCaptor.forClass(User.class);
+        verify(userService).updateUser(userArgumentCaptor.capture());
+
+        User captureUser = userArgumentCaptor.getValue();
+
+        assertThat(captureUser.getName()).isEqualTo(user.getName());
+    }
 }

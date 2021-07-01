@@ -2,17 +2,15 @@ package com.Book.projectBook.Service;
 
 import com.Book.projectBook.Model.User;
 import com.Book.projectBook.Repository.UserRepository;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 
 @Service
-public class UserService implements UserServiceInterface{///888888
+public class UserService implements UserServiceInterface{
 
     private UserRepository userRepository;
 
@@ -26,18 +24,6 @@ public class UserService implements UserServiceInterface{///888888
         return userRepository.save(user);
     }
 
-//    @Override
-//    public User updateUser(User user) {
-//        Optional<User> optionalUser = userRepository.findById(user.getId());
-//        User updateUser = optionalUser.get();
-//        updateUser.setName(user.getName());
-//        updateUser.setLastname(user.getLastname());
-//        updateUser.setEmail(user.getEmail());
-//        updateUser.setDocumentNumber(user.getDocumentNumber());
-//        userRepository.save(updateUser);
-//        return userRepository.findById(user.getId()).get();
-//    }
-
     @Override
     public User updateUser(User user) {
         Optional<User> optionalUser = userRepository.findById(user.getId());
@@ -47,13 +33,14 @@ public class UserService implements UserServiceInterface{///888888
             updateUser.setLastname(user.getLastname());
             updateUser.setEmail(user.getEmail());
             updateUser.setDocumentNumber(user.getDocumentNumber());
-            userRepository.save(updateUser);    }
+            userRepository.save(updateUser);
+        }
         return userRepository.findById(user.getId()).get();}
 
     @Override
-    public String deleteUserById(Long idUser) {
-        userRepository.deleteById(idUser);
-        return "User removed"+ idUser;
+    public String deleteUserById(Long id) {
+        userRepository.deleteById(id);
+        return "User removed \n" + "IdUser:" + id;
     }
 
     @Override

@@ -79,11 +79,27 @@ class UserServiceTest {
         //then
         User userActual = underTest.updateUser(userUpdate);
 
-//        verify(userRepository).save(anyLong());
         verify(userRepository).save(userActual);
         verify(userRepository, times(2)).findById(any());
 
         assertThat(userActual.getName()).isEqualTo("FEDERICOUPDATE");
     }
 
+    @Test
+    void canDeleteById() {
+
+        String result = underTest.deleteUserById(1L);
+
+        verify(userRepository, times(1)).deleteById(1L);
+
+        assertThat(result).isEqualTo("User removed \n" + "IdUser:" + 1L);
+    }
+
+    @Test
+    void canGetBookById() {
+        User user = new User(1L,"Federico","Ueno","federico@gmail.com", 21212121);
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        Optional<User> bookObtained = underTest.getUserById(user);
+        verify(userRepository, times(1)).findById(1L);
+    }
 }

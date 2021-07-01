@@ -19,11 +19,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-//    @GetMapping("/listUser")
-//    public List<User> listUser() {
-//        return userService.listUser();
-//    }
-
     @PostMapping("/createUser")
     public ResponseEntity<User> createUser(@Valid @RequestBody User user) {
         userService.createUser(user);
