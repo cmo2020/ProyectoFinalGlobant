@@ -1,5 +1,6 @@
 package com.Book.projectBook.Controller;
 
+import com.Book.projectBook.Model.Booking;
 import com.Book.projectBook.Model.User;
 import com.Book.projectBook.Service.UserService;
 import org.junit.jupiter.api.Test;
@@ -9,8 +10,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.Date;
 import java.util.Optional;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -79,4 +82,37 @@ class UserControllerTest {
 //        assertEquals(user, userActual);//que valor espero, cual recibo
 
     }
+
+    @Test
+    public void deleteUserByIdWhenMethodsDelete() {
+
+        String result = underTest.deleteUserById(1L);
+
+        verify(userService, times(1)).deleteUserById(1L);
+
+        assertThat(result).isEqualTo(null);
+
+    }
+
+    @Test
+    void testGetBookingById() {
+
+        User user = new User (
+                1L,
+                "FEDERICO",
+                "Ueno",
+                "federico@gmail.com",
+                21212121);
+
+        when(userService.getUserById(user)).thenReturn(Optional.of(user));
+
+        Optional<User> result = underTest.getUserById(user);
+
+        verify(userService, times(1)).getUserById(user);
+
+        assertThat(result).isEqualTo(Optional.of(user));
+
+    }
+
+
 }
