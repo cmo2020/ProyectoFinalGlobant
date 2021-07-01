@@ -15,7 +15,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -23,30 +25,62 @@ import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
-@WebMvcTest(UserController.class)
 class UserControllerTest {
 
     @InjectMocks
     private UserController underTest;
 
-    @Autowired
-    private MockMvc mvc;
-
-    @MockBean
+    @Mock
     private UserService userService;
-    private UserRepository userRepository;
 
+    @Captor
+    private ArgumentCaptor<User> userArgumentCapture;
+
+
+//    @Test
+//    public void createUserWhenMethodsPost() {
+//
+//        //given
+//        User user = new User(
+//                1L,
+//                "FEDERICO",
+//                "Ueno",
+//                "federico@gmail.com",
+//                21212121);
+//
+//        //when
+//        String jsonBody = "{\"id\": 1,\"name\": \"Federico\", \"lastname\": \"Ueno\", \"email\": \"federico@gmail.com\", \"documentNumber\": \"21212121\"}";
+//
+//        mvc.perform(post("/user/createUser")
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .content(jsonBody)
+//                .accept(MediaType.APPLICATION_JSON))
+//                .andExpect(status().isCreated());
+//
+//        //then
+//        ArgumentCaptor<User> userArgumentCaptor =
+//                ArgumentCaptor.forClass(User.class);
+//        verify(userService).createUser(userArgumentCaptor.capture());
+//
+//        User captureUser = userArgumentCaptor.getValue();
+//
+//        assertThat(captureUser.getName()).isEqualTo(user.getName());
+//    }
 
     @Test
-    public void createUserWhenMethodsPost() throws Exception {
+    public void createUserWhenMethodsPost() throws Exception{
+
+        User userMock = mock(User.class);
 
         //given
         User user = new User(
@@ -56,27 +90,25 @@ class UserControllerTest {
                 "federico@gmail.com",
                 21212121);
 
-        //when
-        String jsonBody = "{\"id\": 1,\"name\": \"Federico\", \"lastname\": \"Ueno\", \"email\": \"federico@gmail.com\", \"documentNumber\": \"21212121\"}";
+//        doNothing().when(userService).createUser(any());
 
-        mvc.perform(post("/user/createUser")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(jsonBody)
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated());
+        when(userService.createUser(any())).thenReturn(userMock);
 
-        //then
-        ArgumentCaptor<User> userArgumentCaptor =
-                ArgumentCaptor.forClass(User.class);
-        verify(userService).createUser(userArgumentCaptor.capture());
+        ResponseEntity<User> responseEntity = underTest.createUser(user);
 
-        User captureUser = userArgumentCaptor.getValue();
+        verify(userService).createUser(userArgumentCapture.capture());
 
-        assertThat(captureUser.getName()).isEqualTo(user.getName());
+        assertEquals(user, userArgumentCapture.getValue());
+
+        assertNotNull(responseEntity);
+        assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());//que valor espero, cual recibo
+
     }
 
     @Test
-    public void updateUserByIdWhenMethodsPut() throws Exception {
+    public void updateUserByIdWhenMethodsPut() {
+
+        User userMock = mock(User.class);
 
         //given
         User user = new User(
@@ -86,24 +118,15 @@ class UserControllerTest {
                 "federico@gmail.com",
                 21212121);
 
-        given(userRepository.findById(user.getId())).willReturn(Optional.of(user));
+        when(userService.updateUser(any())).thenReturn(userMock);
 
-        //when
-        String jsonBody = "{\"id\": 1,\"name\": \"FedericoUpdate\", \"lastname\": \"Ueno\", \"email\": \"federico@gmail.com\", \"documentNumber\": \"21212121\"}";
+        User userActual = underTest.updateUser(user);
 
-        mvc.perform(put("/user/updateUserById/{userId}")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(jsonBody)
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(content().json("{\"id\": 1,\"name\": \"FedericoUpdate\", \"lastname\": \"Ueno\", \"email\": \"federico@gmail.com\", \"documentNumber\": \"21212121\"}"));
+        verify(userService).updateUser(userArgumentCapture.capture());
+        assertEquals(user, userArgumentCapture.getValue());
 
-        //then
-        ArgumentCaptor<User> userArgumentCaptor =
-                ArgumentCaptor.forClass(User.class);
-        verify(userService).updateUser(userArgumentCaptor.capture());
+        assertNotNull(userActual);
+//        assertEquals(user, userActual);//que valor espero, cual recibo
 
-        User captureUser = userArgumentCaptor.getValue();
-
-        assertThat(captureUser.getName()).isEqualTo(user.getName());
     }
 }
