@@ -9,58 +9,62 @@ import com.Book.projectBook.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.io.FileWriter;
 import java.util.*;
 
 @Service
 public class BookingService implements BookingServiceInterface{
 
 
-    @Autowired
+
     private BookingRepository bookingRepository;
     @Autowired
     private BookRepository bookRepository;
     @Autowired
     private UserRepository userRepository;
 
-
+    @Autowired
+    public BookingService(BookingRepository bookingRepository) {
+        this.bookingRepository = bookingRepository;
+    }
 
     @Override
     public Booking createBooking(Booking booking) {
         Optional<Book> optionalBook = bookRepository.findById(booking.getBook().getId());
         Optional<User> optionalUser = userRepository.findById(booking.getUser().getId());
-        Book book = optionalBook.get();
-        User user = optionalUser.get();
-        booking.setBook(book);
-        booking.setUser(user);
+             Book book = optionalBook.get();
+             User user = optionalUser.get();
+             booking.setBook(book);
+             booking.setUser(user);
         return bookingRepository.save(booking);
     }
 
     @Override
     public Booking updateBooking(Booking booking) {
         Optional<Booking> optionalBooking = bookingRepository.findById(booking.getIdBooking());
-        Booking updateBooking = optionalBooking.get();
-        updateBooking.setStartDate(booking.getStartDate());
-        updateBooking.setEndDate(booking.getEndDate());
-        return bookingRepository.save(booking);
+        if(optionalBooking.isPresent()){
+             Booking updatedBooking = optionalBooking.get();
+             updatedBooking.setStartDate(booking.getStartDate());
+             updatedBooking.setEndDate(booking.getEndDate());
+             bookingRepository.save(updatedBooking);}
+        return bookingRepository.findById(booking.getIdBooking()).get();
     }
 
     @Override
     public String deleteByIdBooking(Long idBooking) {
         bookingRepository.deleteById(idBooking);
-        return "Booking removed"+ idBooking;
+        return "Booking removed \n" + "IdBooking:" + idBooking;
+
     }
 
-//    @Override
-//    @Transactional(readOnly = true)
-//    public List<Booking> listBooking() {
-//       return (List<Booking>)bookingRepository.findAll();
-//    }
-//
-//    @Override
-//    public Optional<Booking> getBookingById(Booking booking) {
-//        return bookingRepository.findById(booking.getIdBooking());
-//    }
+    @Override
+    @Transactional(readOnly = true)
+    public List<Booking> listBooking() {
+       return (List<Booking>)bookingRepository.findAll();
+    }
+
+    @Override
+    public Optional<Booking> getBookingById(Booking booking) {
+        return bookingRepository.findById(booking.getIdBooking());
+    }
 
 }

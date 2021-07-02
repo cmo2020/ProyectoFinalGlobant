@@ -2,20 +2,20 @@ package com.Book.projectBook.Service;
 
 import com.Book.projectBook.Model.User;
 import com.Book.projectBook.Repository.UserRepository;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 import java.util.Optional;
 
-@AllArgsConstructor
+
 @Service
 public class UserService implements UserServiceInterface{
 
-    @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Override
     public User createUser(User user){
@@ -25,27 +25,24 @@ public class UserService implements UserServiceInterface{
     @Override
     public User updateUser(User user) {
         Optional<User> optionalUser = userRepository.findById(user.getId());
-        User updateUser = optionalUser.get();
-        updateUser.setName(user.getName());
-        updateUser.setLastname(user.getLastname());
-        updateUser.setEmail(user.getEmail());
-        updateUser.setDocumentNumber(user.getDocumentNumber());
-        return  userRepository.save(updateUser);    }
+        if(optionalUser.isPresent()){
+            User updateUser = optionalUser.get();
+            updateUser.setName(user.getName());
+            updateUser.setLastname(user.getLastname());
+            updateUser.setEmail(user.getEmail());
+            updateUser.setDocumentNumber(user.getDocumentNumber());
+            userRepository.save(updateUser);
+        }
+        return userRepository.findById(user.getId()).get();}
 
-//    @Override
-//    public String deleteUserById(Long idUser) {
-//        userRepository.deleteById(idUser);
-//        return "User removed"+ idUser;
-//    }
+    @Override
+    public String deleteUserById(Long id) {
+        userRepository.deleteById(id);
+        return "User removed \n" + "IdUser:" + id;
+    }
 
-//    @Override
-//    @Transactional(readOnly = true)
-//    public List<User> listUser() {
-//        return (List<User>) userRepository.findAll();
-//    }
-//
-//    @Override
-//    public Optional<User> getUserById(User user) {
-//        return userRepository.findById(user.getId());
-//    }
+    @Override
+    public Optional<User> getUserById(User user) {
+        return userRepository.findById(user.getId());
+    }
 }

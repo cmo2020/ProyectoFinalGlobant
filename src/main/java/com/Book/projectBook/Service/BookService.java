@@ -2,18 +2,12 @@ package com.Book.projectBook.Service;
 
 import com.Book.projectBook.Exception.ExceptionBookExists;
 import com.Book.projectBook.Model.Book;
-
 import com.Book.projectBook.Model.Booking;
 import com.Book.projectBook.Repository.BookRepository;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,12 +16,19 @@ import java.util.Optional;
 public class BookService implements BookServiceInterface {
 
 
-    @Autowired
+
     private BookRepository bookRepository;
 
-    public Book findByTitle(String title) {
-        return bookRepository.findByTitle(title);
+    @Autowired
+    public BookService(BookRepository bookRepository) {
+        this.bookRepository = bookRepository;
     }
+
+
+    public Book findByTitle(String title) {
+       return bookRepository.findByTitle(title);
+    }
+
 
     @Override
     public Book createBook(Book book) {
@@ -41,36 +42,58 @@ public class BookService implements BookServiceInterface {
     @Override
     public Book updateBook(Book book) {
         Optional<Book> optionalBook = bookRepository.findById(book.getId());
-        Book updateBook = optionalBook.get();
-        updateBook.setTitle(book.getTitle());
-        updateBook.setAuthor(book.getAuthor());
-        updateBook.setPublishedDate(book.getPublishedDate());
-        return bookRepository.save(book);
+        if (optionalBook.isPresent()){
+             Book updateBook = optionalBook.get();
+             updateBook.setTitle(book.getTitle());
+             updateBook.setAuthor(book.getAuthor());
+             updateBook.setPublishedDate(book.getPublishedDate());
+             bookRepository.save(updateBook);
+
+        }
+
+        return   bookRepository.findById(book.getId()).get();
     }
 
-//    @Override
-//    public String deleteById(Long id) {
-//        bookRepository.deleteById(id);
-//        return "Book removed \n" + "IdBook:" + id;
-//    }
+      @Override
+        public String deleteById(Long id) {
+           bookRepository.deleteById(id);
+           return "Book removed \n" + "IdBook:" + id;
+    }
 
     @Override
     @Transactional(readOnly = true)
-    public List<Book> listBook() {
+       public List<Book> listBook() {
         return (List<Book>) bookRepository.findByOrderByTitleAsc();
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<Book> listAvailable() {
-        return (List<Book>) bookRepository.findByBookingIsNull();
+        public List<Book> listAvailable() {
+
+            return (List<Book>) bookRepository.findByBookingIsNull();
     }
 
     @Override
-    public Optional<Book> getBookById(Book book) {
-        return bookRepository.findById(book.getId());
+    public List<Book> listReserved() {
+
+            return (List<Book>) bookRepository.findByBookingNotNull();
     }
 
+
+    @Override
+    public Optional<Book> getBookById(Book book) {
+
+         return bookRepository.findById(book.getId());
+    }
+
+
+    public String getStatus(Booking booking) {
+        if (booking == null) {
+             return "available";
+        } else {
+            return "reserved";
+        }
+    }
 
 }
 
