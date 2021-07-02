@@ -2,12 +2,10 @@ package com.Book.projectBook.Service;
 
 import com.Book.projectBook.Exception.ExceptionBookExists;
 import com.Book.projectBook.Model.Book;
-
 import com.Book.projectBook.Model.Booking;
 import com.Book.projectBook.Repository.BookRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
@@ -15,7 +13,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-
 import static org.mockito.Mockito.*;
 
 
@@ -104,7 +101,7 @@ class BookServiceTest {
 
 
     @Test
-    void deleteById() {
+    void canDeleteById() {
 
         String result = bookService.deleteById(1L);
 
@@ -115,7 +112,7 @@ class BookServiceTest {
     }
 
     @Test
-    void listBook() {
+    void canListBook() {
         Date publishedDate = new Date();
         Book [] bookArray = new Book[]{
                 new Book ( 1L, "Title1", "Author1", publishedDate),
@@ -136,7 +133,7 @@ class BookServiceTest {
     }
 
     @Test
-    void listAvailable() {
+    void canListAvailable() {
         Date publishedDate = new Date();
         Book [] bookArray = new Book[]{
                 new Book ( 1L, "Title1", "Author1", publishedDate),
@@ -159,7 +156,7 @@ class BookServiceTest {
     }
 
     @Test
-    void listReserved() {
+    void canListReserved() {
         Date publishedDate = new Date();
         Book [] bookArray = new Book[]{
                 new Book ( 1L, "Title1", "Author1", publishedDate),
@@ -180,7 +177,7 @@ class BookServiceTest {
     }
 
     @Test
-    void getStatus() {
+    void canGetStatus() {
         Booking newBooking = new Booking();
 
         String bookingCreated = bookService.getStatus(newBooking);
@@ -192,7 +189,7 @@ class BookServiceTest {
     }
 
     @Test
-    void getBookById() {
+    void canGetBookById() {
 
         Date date = new Date(2020, 1, 1);
         Book book = new Book(1L, "Yoda", "SomeBody", date);

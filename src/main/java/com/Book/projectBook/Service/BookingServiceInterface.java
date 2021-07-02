@@ -1,9 +1,7 @@
 package com.Book.projectBook.Service;
 
-import com.Book.projectBook.Model.Book;
-import com.Book.projectBook.Model.Booking;
-import com.Book.projectBook.Model.User;
 
+import com.Book.projectBook.Model.Booking;
 import java.util.List;
 import java.util.Optional;
 

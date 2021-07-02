@@ -1,6 +1,6 @@
 package com.Book.projectBook.Controller;
 
-import com.Book.projectBook.Model.Booking;
+
 import com.Book.projectBook.Model.User;
 import com.Book.projectBook.Service.UserService;
 import org.junit.jupiter.api.Test;
@@ -9,14 +9,11 @@ import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
-import java.util.Date;
 import java.util.Optional;
-
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @ExtendWith(MockitoExtension.class)
 class UserControllerTest {

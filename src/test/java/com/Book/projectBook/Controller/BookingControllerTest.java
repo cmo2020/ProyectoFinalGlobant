@@ -1,26 +1,22 @@
 package com.Book.projectBook.Controller;
-
-import com.Book.projectBook.Exception.ExceptionBookExists;
-import com.Book.projectBook.Model.Book;
 import com.Book.projectBook.Model.Booking;
-import com.Book.projectBook.Service.BookService;
 import com.Book.projectBook.Service.BookingService;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
 import java.util.*;
-
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
+
 @ExtendWith(MockitoExtension.class)
 class BookingControllerTest {
 
@@ -29,6 +25,9 @@ class BookingControllerTest {
 
     @InjectMocks
     private BookingController bookingController;
+
+    @Captor
+    private ArgumentCaptor<Booking> bookingArgumentCapture;
 
     @BeforeEach
     void setUp() {
@@ -105,18 +104,21 @@ class BookingControllerTest {
     @Test
     void  testUpdateBooking() {
 
-        Date startDate = new Date();
-        Date endDate = new Date();
+        Booking bookingMock = mock(Booking.class);
+
+        Date startDate  = new Date(2020, 1, 1);
+        Date endDate = new Date(2021, 2, 7);
         Booking booking = new Booking (3L, startDate, endDate);
 
-        when(bookingService.updateBooking(booking)).thenReturn(booking);
 
-        Booking result = bookingController.updateBooking(booking);
+        when(bookingService.updateBooking(any())).thenReturn(bookingMock);
 
-        verify(bookingService, times(1)).updateBooking(booking);
+        Booking bookingActual = bookingController.updateBooking(booking);
 
-        assertThat(result.getStartDate()).isEqualTo(startDate);
-        assertThat(result.getEndDate()).isEqualTo(endDate);
+        verify(bookingService).updateBooking(bookingArgumentCapture.capture());
+        assertEquals(booking, bookingArgumentCapture.getValue());
+
+        assertNotNull(bookingActual);
 
 
 
